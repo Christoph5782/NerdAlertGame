@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 0d656b1f28b56594ab54142964b24d98
+  - enabled: 1
+    path: Assets/Scenes/CharaterCreation.unity
+    guid: 46329cafe7eb03e47a8956738a23127e
+  - enabled: 1
+    path: Assets/Scenes/CharacterSelection.unity
+    guid: 20f6dc2665f845f479569944a064eef2
+  - enabled: 1
+    path: Assets/Scenes/Credits.unity
+    guid: 3eb4d1a2eccfa654db411b545d61b4f9
+  - enabled: 1
+    path: Assets/Scenes/Campaign.unity
+    guid: f3c578cc38227d44f92a0617be3dc22e
+  - enabled: 1
+    path: Assets/Scenes/MissionBriefing.unity
+    guid: 4f0eefcf8053faa45b2203a4c21e26e9
+  m_configObjects: {}

@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: e79473c6419b530428c57c3d4bedd2de
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: a song for jennifer
+  fontNames:
+  - a song for jennifer
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: d43fd5b66cc8c38429dcccbc7c301c62, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
