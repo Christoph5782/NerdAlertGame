@@ -115,7 +115,7 @@ public class MissionBriefingController : MonoBehaviour
         {
             w = 2;
         }
-        DontDestroyMusic.ChangeMusic(missionmusic[w]);
+        DontDestroyMusic.ChangeMusic(w);
     }
 
     // Update is called once per frame
