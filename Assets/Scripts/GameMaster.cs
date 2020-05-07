@@ -1,11 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameMaster : MonoBehaviour
 {
+    public static bool missionsuccess = false;
     public int totalenemies;
     public int totalusers;
+
+    private bool endmission = false;
+    //public AudioSource voice;
+
+
+
 
     public Unit selectedUnit;
 
@@ -22,6 +30,8 @@ public class GameMaster : MonoBehaviour
     void Start()
     {
         CountTroopsAlive();
+        missionsuccess = false;
+        endmission = false;
     }
 
     private void Update()
@@ -29,6 +39,9 @@ public class GameMaster : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             EndTurn();
+        }
+        if (endmission){
+            SceneManager.LoadScene("Campaign");
         }
     }
 
@@ -52,10 +65,16 @@ public class GameMaster : MonoBehaviour
         if(totalenemies == 0)
         {
             print("User Wins!");
+            missionsuccess = true;
+            //play victory audio
+            endmission = true;
         }
         else if (totalusers == 0)
         {
             print("User Lost");
+            missionsuccess = false;
+            //play lost audio
+            endmission = true;
         }
     }
 
