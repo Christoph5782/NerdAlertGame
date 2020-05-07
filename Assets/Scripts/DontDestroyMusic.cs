@@ -8,6 +8,9 @@ public class DontDestroyMusic : MonoBehaviour
     public static AudioSource player;
     public static AudioClip[] music;
 
+    public AudioSource playerinput;
+    public AudioClip[] musicinput;
+
     void Awake()
     {
         GameObject[] objs = GameObject.FindGameObjectsWithTag("musicplayer");
@@ -18,16 +21,18 @@ public class DontDestroyMusic : MonoBehaviour
         }
 
         DontDestroyOnLoad(this.gameObject);
+        player = playerinput;
+        music = musicinput;
     }
 
-    public static void ChangeMusic(AudioClip s){
+    public static void ChangeMusic(int s){
 
-        /*if (s >= music.Length){
+        if (s >= music.Length){
             print("panicpanicpanicpanicpanicpanic");
-        }*/
+        }
 
-        //player.Stop();
-        //player.clip = s;
-        //player.Play();
+        player.Stop();
+        player.clip = music[s];
+        player.Play();
     }
 }

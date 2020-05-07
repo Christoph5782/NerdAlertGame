@@ -64,6 +64,9 @@ public class CampaignController : MonoBehaviour
         LoadGameData();
         worldnum = FindStartPage();
         LoadWorld(worldnum);
+        if(GameMaster.missionsuccess == true){
+            MarkComplete();
+        }
     }
 
     // Update is called once per frame
@@ -239,6 +242,40 @@ public class CampaignController : MonoBehaviour
         selected = -1;
         launchbutton.interactable = false;
         disablelaunch.SetActive(true);
+    }
+
+    private void MarkComplete(){
+
+        int w = worldnum;
+
+        switch (w)
+        {
+            case 0:
+                world = campaigndata.worldT;
+                break;
+            case 1:
+                world = campaigndata.world1;
+                break;
+            case 2:
+                world = campaigndata.world2;
+                break;
+            case 3:
+                world = campaigndata.world3;
+                break;
+            case 4:
+                world = campaigndata.world4;
+                break;
+            case 5:
+                world = campaigndata.worldF;
+                break;
+            default:
+                print("panicpanicpanicpanicpanicpanicpanic");
+                world = campaigndata.worldT;
+                w = 0;
+                break;
+        }
+
+        world[missionnum] = true;
     }
 
     public void LoadGameData()

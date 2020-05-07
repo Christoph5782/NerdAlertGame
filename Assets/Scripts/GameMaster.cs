@@ -6,11 +6,19 @@ using UnityEngine.SceneManagement;
 public class GameMaster : MonoBehaviour
 {
     public static bool missionsuccess = false;
+    public static AudioSource voice;
+    public static AudioSource sfx;
+    public static VoicePackage[] package;
     public int totalenemies;
     public int totalusers;
+    public static Sprite[] tempsprite;
 
     private bool endmission = false;
-    //public AudioSource voice;
+    private static int afktimer;
+    public AudioSource voiceinput;
+    public AudioSource sfxinput;
+    public VoicePackage[] packageinput;
+    public Sprite[] tempspriteinput;
 
 
 
@@ -26,12 +34,20 @@ public class GameMaster : MonoBehaviour
             tile.Reset();
         }
     }
+    private void Awake()
+    {
+        voice = voiceinput;
+        sfx = sfxinput;
+        package = packageinput;
+        tempsprite = tempspriteinput;
+    }
 
     void Start()
     {
         CountTroopsAlive();
         missionsuccess = false;
         endmission = false;
+        afktimer = 0;
     }
 
     private void Update()
@@ -40,9 +56,30 @@ public class GameMaster : MonoBehaviour
         {
             EndTurn();
         }
-        if (endmission){
+        if (endmission && voice.isPlaying == false){
+            DontDestroyMusic.ChangeMusic(0);
             SceneManager.LoadScene("Campaign");
         }
+        afktimer++;
+        if(afktimer == 10000){
+            if (playerTurn == 1){
+                int i = Random.Range(0, 6);
+                int r = SelectionController.GetCharVoice(i);
+                if (r == -1)
+                {
+                    r = SelectionController.GetLeaderVoice();
+                }
+                voice.Stop();
+                voice.clip = package[r].Getuserafk();
+                voice.Play();
+            }
+            afktimer = 0;
+        }
+    }
+
+    public static void ResetAFK()
+    {
+        afktimer = 0;
     }
 
     private void CountTroopsAlive()
@@ -66,14 +103,18 @@ public class GameMaster : MonoBehaviour
         {
             print("User Wins!");
             missionsuccess = true;
-            //play victory audio
+            voice.Stop();
+            voice.clip = package[SelectionController.GetLeaderVoice()].GetalltargetkiaE();
+            voice.Play();
             endmission = true;
         }
         else if (totalusers == 0)
         {
             print("User Lost");
             missionsuccess = false;
-            //play lost audio
+            voice.Stop();
+            voice.clip = package[SelectionController.GetLeaderVoice()].Gettroopsextracted();
+            voice.Play();
             endmission = true;
         }
     }

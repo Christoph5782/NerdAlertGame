@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
+    public int num;
+    public SpriteRenderer gamechar;
+    public Transform charcontainer;
+
     public bool selected;
 
     GameMaster gm;
@@ -41,11 +45,15 @@ public class Unit : MonoBehaviour
     {
         gm = FindObjectOfType<GameMaster>();
         camAnim = Camera.main.GetComponent<Animator>();
+        if(playerNumber == 1){
+            gamechar.sprite = GameMaster.tempsprite[SelectionController.GetCharVoice(num)];//This displays the sprite of the voice actor, this is only temperary
+        }
     }
 
     private void OnMouseDown()
     {
         ResetWeaponIcons();
+        GameMaster.ResetAFK();
 
         if (selected == true)
         {
@@ -92,7 +100,7 @@ public class Unit : MonoBehaviour
     void Attack(Unit enemy)
     {
         camAnim.SetTrigger("shake");
-        
+        GameMaster.ResetAFK();
         hasAttacked = true;
 
         int enemyDamage = attackDamage - enemy.armor;
@@ -103,10 +111,28 @@ public class Unit : MonoBehaviour
             DamageIcon instance = Instantiate(damageIcon, enemy.transform.position, Quaternion.identity);
             instance.Setup(enemyDamage);
             enemy.health -= enemyDamage;
+            if (playerNumber == 1  && !(enemy.health <= 0))
+            {
+                GameMaster.voice.Stop();
+                GameMaster.voice.clip = GameMaster.package[SelectionController.GetCharVoice(num)].Gethittarget();
+                GameMaster.voice.Play();
+            }
+            if (enemy.playerNumber == 1 && !(enemy.health <= 0))
+            {
+                GameMaster.voice.Stop();
+                GameMaster.voice.clip = GameMaster.package[SelectionController.GetCharVoice(enemy.num)].Gethitagainst();
+                GameMaster.voice.Play();
+            }
         }
         if (myDamage >= 1)
         {
             health -= myDamage;
+            if (playerNumber == 1 && !(health <= 0))
+            {
+                GameMaster.voice.Stop();
+                GameMaster.voice.clip = GameMaster.package[SelectionController.GetCharVoice(num)].Gethitagainst();
+                GameMaster.voice.Play();
+            }
         }
 
         if (enemy.health <= 0)
@@ -114,6 +140,20 @@ public class Unit : MonoBehaviour
             Instantiate(deathEffect, enemy.transform.position, Quaternion.identity);
             Destroy(enemy.gameObject);
             GetWalkableTiles();
+            if (playerNumber == 1){
+                GameMaster.voice.Stop();
+                GameMaster.voice.clip = GameMaster.package[SelectionController.GetCharVoice(num)].Getkilledtarget();//Randomize
+                GameMaster.voice.Play();
+            }
+            else if (enemy.playerNumber == 1)
+            {
+                GameMaster.sfx.Stop();
+                GameMaster.sfx.clip = GameMaster.package[SelectionController.GetCharVoice(enemy.num)].Getkilled();
+                GameMaster.sfx.Play();
+                GameMaster.voice.Stop();
+                GameMaster.voice.clip = GameMaster.package[SelectionController.GetCharVoice(enemy.num)].Getteammatekilled();
+                GameMaster.voice.Play();
+            }
         }
 
         if (health <= 0)
@@ -121,6 +161,15 @@ public class Unit : MonoBehaviour
             Instantiate(deathEffect, transform.position, Quaternion.identity);
             gm.ResetTiles();
             Destroy(this.gameObject);
+            if (playerNumber == 1)
+            {
+                GameMaster.sfx.Stop();
+                GameMaster.sfx.clip = GameMaster.package[SelectionController.GetCharVoice(num)].Getkilled();
+                GameMaster.sfx.Play();
+                GameMaster.voice.Stop();
+                GameMaster.voice.clip = GameMaster.package[SelectionController.GetCharVoice(num)].Getteammatekilled();
+                GameMaster.voice.Play();
+            }
         }
 
     }
@@ -175,6 +224,18 @@ public class Unit : MonoBehaviour
 
     public void Move(Vector2 tilePos)
     {
+        GameMaster.ResetAFK();
+        if (playerNumber == 1){
+            int i = Random.Range(0, 2);
+            GameMaster.voice.Stop();
+            if (i == 0){
+                GameMaster.voice.clip = GameMaster.package[SelectionController.GetCharVoice(num)].Getsprinting();
+            }
+            else{
+                GameMaster.voice.clip = GameMaster.package[SelectionController.GetCharVoice(num)].Getflanking();
+            }
+            GameMaster.voice.Play();
+        }
         gm.ResetTiles();
         StartCoroutine(StartMovement(tilePos));
     }
@@ -184,7 +245,7 @@ public class Unit : MonoBehaviour
         Vector2 position;
         while((Vector2)transform.position != destination)
         {
-            position = Vector2.MoveTowards(transform.position, destination, moveSpeed * Time.deltaTime);
+            position = Vector2.MoveTowards(transform.position, destination, moveSpeed * 0.5f * Time.deltaTime);
             transform.position = new Vector3(position.x, position.y, transform.position.z);
             yield return null;
         }

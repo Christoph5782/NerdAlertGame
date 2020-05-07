@@ -9,6 +9,7 @@ public class SelectionController : MonoBehaviour
 {
     private static string operationname;
     private static int[] teamchars = new int[6];
+    private static int[] teamvoices = new int[6];
     private static int leadervoice = 6;
     private static int teamleader = 0;
 
@@ -523,6 +524,9 @@ public class SelectionController : MonoBehaviour
     public void LaunchGame() { 
         for (int i = 0; i < 6; i++) {
             teamchars[i] = selectedchar[i];
+            if (selectedchar[i] >= 0){
+                teamvoices[i] = gamedata.voicetype[selectedchar[i]];
+            }
         }
         leadervoice = gamedata.voicetype[teamleader];
         SceneManager.LoadScene("MissionBriefing");
@@ -687,5 +691,8 @@ public class SelectionController : MonoBehaviour
 
     public static int GetLeaderVoice(){
         return leadervoice;
+    }
+    public static int GetCharVoice(int s){
+        return teamvoices[s];
     }
 }
